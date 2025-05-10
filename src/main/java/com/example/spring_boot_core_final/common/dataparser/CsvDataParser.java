@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -15,7 +16,22 @@ import java.util.List;
 public class CsvDataParser implements DataParser{
     @Override
     public List<String> cities() {
-        return null;
+        try(InputStreamReader input = new InputStreamReader(
+                getClass().getClassLoader().getResourceAsStream("Tariff.csv"))) {
+            List<Price> prices = new CsvToBeanBuilder<Price>(input)
+                    .withType(Price.class)
+                    .build()
+                    .parse();
+
+            List<String> cities = new ArrayList<>();
+            for(Price price : prices) {
+                cities.add(price.getCity());
+            }
+            return cities;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public List<String> sectors(String city) {

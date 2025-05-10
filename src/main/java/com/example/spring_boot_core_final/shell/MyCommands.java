@@ -2,15 +2,19 @@ package com.example.spring_boot_core_final.shell;
 
 import com.example.spring_boot_core_final.account.dto.Account;
 import com.example.spring_boot_core_final.account.service.AuthenticationService;
+import com.example.spring_boot_core_final.price.service.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @ShellComponent
 public class MyCommands {
 
     private final AuthenticationService authService;
+    private final PriceService priceService;
 
     @ShellMethod
     public String login(long id, String password) {
@@ -33,12 +37,23 @@ public class MyCommands {
 
     @ShellMethod
     public String currentUser() {
-        return null;
+        if(authService.isLogin()) {
+            Account account = authService.getCurrentAccount();
+            return String.format("Account(id=%d, password=%s, name=%s)", account.getId(), account.getPassword(), account.getName());
+        }
+        return "현재 로그인 상태가 아닙니다.";
     }
 
     @ShellMethod
     public String city() {
-        return null;
+        List<String> cities = priceService.cities();
+        StringBuilder sb = new StringBuilder("[");
+        for(String city : cities) {
+            sb.append(city).append(", ");
+        }
+        sb.replace(sb.length(), sb.length(), "]");
+
+        return sb.toString();
     }
 
     @ShellMethod

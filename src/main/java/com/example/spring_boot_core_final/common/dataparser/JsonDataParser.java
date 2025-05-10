@@ -20,7 +20,18 @@ public class JsonDataParser implements DataParser{
 
     @Override
     public List<String> cities() {
-        return null;
+        try(InputStream input = getClass().getClassLoader().getResourceAsStream("Tariff.json")) {
+            List<Price> prices = objectMapper.readValue(input, new TypeReference<>() {});
+
+            return prices.stream()
+                    .map(Price::getCity)
+                    .distinct()
+                    .sorted()
+                    .toList();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public List<String> sectors(String city) {
