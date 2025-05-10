@@ -1,19 +1,34 @@
 package com.example.spring_boot_core_final.shell;
 
+import com.example.spring_boot_core_final.account.dto.Account;
+import com.example.spring_boot_core_final.account.service.AuthenticationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
+@RequiredArgsConstructor
 @ShellComponent
 public class MyCommands {
 
+    private final AuthenticationService authService;
+
     @ShellMethod
     public String login(long id, String password) {
-        return null;
+        Account account = authService.login(id, password);
+        if(account == null) {
+            return "로그인 실패 : 아이디 or 비밀번호가 일치하지 않습니다.";
+        } else {
+            return String.format("Account(id=%d, password=%s, name=%s)", id, password, account.getName());
+        }
     }
 
     @ShellMethod
     public String logout() {
-        return null;
+        if(authService.isLogin()) {
+            authService.logout();
+            return "good bye";
+        }
+        return "현재 로그인 상태가 아닙니다.";
     }
 
     @ShellMethod
