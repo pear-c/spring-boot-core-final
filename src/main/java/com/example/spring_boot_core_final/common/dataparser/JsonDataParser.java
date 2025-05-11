@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,12 +24,14 @@ public class JsonDataParser implements DataParser{
         try(InputStream input = getClass().getClassLoader().getResourceAsStream("Tariff.json")) {
             List<Price> prices = objectMapper.readValue(input, new TypeReference<>() {});
 
-            return prices.stream()
-                    .map(Price::getCity)
-                    .distinct()
-                    .sorted()
-                    .toList();
-
+            List<String> cities = new ArrayList<>();
+            for(Price price : prices) {
+                String cityName = price.getCity().trim();
+                if(!cities.contains(cityName)) {
+                    cities.add(cityName);
+                }
+            }
+            return cities;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
