@@ -97,7 +97,13 @@ public class MyCommands {
 
     @ShellMethod
     public String billTotal(String city, String sector, int usage) {
-        return null;
-    }
+        if(!authService.isLogin()) {
+            return "로그인 먼저 해주세요.";
+        }
+        if(priceService.price(city, sector) == null) {
+            return "잘못된 입력입니다.";
+        }
 
+        return priceService.billTotal(city, sector, usage);
+    }
 }
