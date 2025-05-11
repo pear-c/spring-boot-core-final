@@ -50,6 +50,11 @@ public class CsvDataParser implements DataParser{
                     .withIgnoreLeadingWhiteSpace(true)
                     .build()
                     .parse();
+
+            for(Account account : accounts) {
+                account.setName(account.getName().trim());
+                account.setPassword(account.getPassword().trim());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

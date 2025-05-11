@@ -50,9 +50,9 @@ public class MyCommands {
     }
 
     @ShellMethod
-    public String city() {
+    public String city() throws Exception{
         if(!authService.isLogin()) {
-            return "로그인 먼저 해주세요.";
+            throw new Exception("로그인 먼저 해주세요.");
         }
 
         List<String> cities = priceService.cities();

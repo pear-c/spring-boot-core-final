@@ -32,12 +32,23 @@ public class JsonDataParser implements DataParser{
     public void init() {
         try(InputStream input = getClass().getClassLoader().getResourceAsStream(fileProperties.getPricePath())) {
             prices = objectMapper.readValue(input, new TypeReference<>() {});
+
+            // 모든 필드 trim 보장
+            for (Price price : prices) {
+                price.setCity(price.getCity().trim());
+                price.setSector(price.getSector().trim());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         try(InputStream input = getClass().getClassLoader().getResourceAsStream(fileProperties.getAccountPath())) {
             accounts = objectMapper.readValue(input, new TypeReference<>() {});
+
+            for(Account account : accounts) {
+                account.setName(account.getName().trim());
+                account.setPassword(account.getPassword().trim());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
