@@ -16,7 +16,7 @@ public class PriceService {
         return dataParser.cities();
     }
     public List<String> sectors(String city) {
-        return null;
+        return dataParser.sectors(city);
     }
     public Price price(String city, String sector) {
         return null;

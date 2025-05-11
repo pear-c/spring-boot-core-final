@@ -49,6 +49,7 @@ public class MyCommands {
         if(!authService.isLogin()) {
             return "로그인 먼저 해주세요.";
         }
+
         List<String> cities = priceService.cities();
         StringBuilder sb = new StringBuilder();
         for(String city : cities) {
@@ -61,7 +62,22 @@ public class MyCommands {
 
     @ShellMethod
     public String sector(String city) {
-        return null;
+        if(!authService.isLogin()) {
+            return "로그인 먼저 해주세요.";
+        }
+
+        List<String> sectors = priceService.sectors(city);
+        if(sectors.isEmpty()) {
+            return "잘못된 입력입니다.";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for(String sector : sectors) {
+            sb.append(sector).append(", ");
+        }
+        sb.delete(sb.length()-2, sb.length());
+
+        return "[" + sb + "]";
     }
 
     @ShellMethod
