@@ -19,6 +19,10 @@ public class MyCommands {
 
     @ShellMethod
     public String login(long id, String password) {
+        if(authService.isLogin()) {
+            return "현재 로그인 중입니다. 로그아웃 후 시도해주십시오.";
+        }
+
         Account account = authService.login(id, password);
         if(account == null) {
             return "로그인 실패 : 아이디 or 비밀번호가 일치하지 않습니다.";
