@@ -59,8 +59,8 @@ public class JsonDataParser implements DataParser{
             List<Price> prices = objectMapper.readValue(input, new TypeReference<>() {});
 
             for(Price price : prices) {
-                String cityName = price.getCity();
-                String sectorName = price.getSector();
+                String cityName = price.getCity().trim();
+                String sectorName = price.getSector().trim();
                 if(cityName.equals(city) && sectorName.equals(sector)) {
                     return price;
                 }
