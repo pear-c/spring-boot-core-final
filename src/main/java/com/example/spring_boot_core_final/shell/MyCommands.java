@@ -28,32 +28,35 @@ public class MyCommands {
 
     @ShellMethod
     public String logout() {
-        if(authService.isLogin()) {
-            authService.logout();
-            return "good bye";
+        if(!authService.isLogin()) {
+            return "현재 로그인 상태가 아닙니다.";
         }
-        return "현재 로그인 상태가 아닙니다.";
+        authService.logout();
+        return "good bye";
     }
 
     @ShellMethod
     public String currentUser() {
-        if(authService.isLogin()) {
-            Account account = authService.getCurrentAccount();
-            return String.format("Account(id=%d, password=%s, name=%s)", account.getId(), account.getPassword(), account.getName());
+        if(!authService.isLogin()) {
+            return "현재 로그인 상태가 아닙니다.";
         }
-        return "현재 로그인 상태가 아닙니다.";
+        Account account = authService.getCurrentAccount();
+        return String.format("Account(id=%d, password=%s, name=%s)", account.getId(), account.getPassword(), account.getName());
     }
 
     @ShellMethod
     public String city() {
+        if(!authService.isLogin()) {
+            return "로그인 먼저 해주세요.";
+        }
         List<String> cities = priceService.cities();
-        StringBuilder sb = new StringBuilder("[");
+        StringBuilder sb = new StringBuilder();
         for(String city : cities) {
             sb.append(city).append(", ");
         }
-        sb.replace(sb.length(), sb.length(), "]");
+        sb.delete(sb.length()-2, sb.length());
 
-        return sb.toString();
+        return "[" + sb + "]";
     }
 
     @ShellMethod

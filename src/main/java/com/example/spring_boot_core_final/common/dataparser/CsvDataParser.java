@@ -25,7 +25,10 @@ public class CsvDataParser implements DataParser{
 
             List<String> cities = new ArrayList<>();
             for(Price price : prices) {
-                cities.add(price.getCity());
+                String cityName = price.getCity().trim();
+                if(!cities.contains(cityName)) {
+                    cities.add(cityName);
+                }
             }
             return cities;
 
