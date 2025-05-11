@@ -2,6 +2,7 @@ package com.example.spring_boot_core_final.shell;
 
 import com.example.spring_boot_core_final.account.dto.Account;
 import com.example.spring_boot_core_final.account.service.AuthenticationService;
+import com.example.spring_boot_core_final.price.dto.Price;
 import com.example.spring_boot_core_final.price.service.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -22,7 +23,7 @@ public class MyCommands {
         if(account == null) {
             return "로그인 실패 : 아이디 or 비밀번호가 일치하지 않습니다.";
         } else {
-            return String.format("Account(id=%d, password=%s, name=%s)", id, password, account.getName());
+            return account.toString();
         }
     }
 
@@ -41,7 +42,7 @@ public class MyCommands {
             return "현재 로그인 상태가 아닙니다.";
         }
         Account account = authService.getCurrentAccount();
-        return String.format("Account(id=%d, password=%s, name=%s)", account.getId(), account.getPassword(), account.getName());
+        return account.toString();
     }
 
     @ShellMethod
@@ -82,7 +83,16 @@ public class MyCommands {
 
     @ShellMethod
     public String price(String city, String sector) {
-        return null;
+        if(!authService.isLogin()) {
+            return "로그인 먼저 해주세요.";
+        }
+
+        Price price = priceService.price(city, sector);
+        if(price == null) {
+            return "잘못된 입력입니다.";
+        } else {
+            return price.toString();
+        }
     }
 
     @ShellMethod

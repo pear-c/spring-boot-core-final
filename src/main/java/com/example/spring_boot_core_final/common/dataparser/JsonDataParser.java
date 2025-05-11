@@ -55,7 +55,20 @@ public class JsonDataParser implements DataParser{
     }
     @Override
     public Price price(String city, String sector) {
-        return null;
+        try(InputStream input = getClass().getClassLoader().getResourceAsStream("Tariff.json")) {
+            List<Price> prices = objectMapper.readValue(input, new TypeReference<>() {});
+
+            for(Price price : prices) {
+                String cityName = price.getCity();
+                String sectorName = price.getSector();
+                if(cityName.equals(city) && sectorName.equals(sector)) {
+                    return price;
+                }
+            }
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public List<Account> accounts() {

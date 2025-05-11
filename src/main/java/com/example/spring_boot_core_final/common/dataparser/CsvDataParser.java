@@ -18,6 +18,7 @@ public class CsvDataParser implements DataParser{
     public List<String> cities() {
         try(InputStreamReader input = new InputStreamReader(
                 getClass().getClassLoader().getResourceAsStream("Tariff.csv"))) {
+
             List<Price> prices = new CsvToBeanBuilder<Price>(input)
                     .withType(Price.class)
                     .build()
@@ -40,6 +41,7 @@ public class CsvDataParser implements DataParser{
     public List<String> sectors(String city) {
         try(InputStreamReader input = new InputStreamReader(
                 getClass().getClassLoader().getResourceAsStream("Tariff.csv"))) {
+
             List<Price> prices = new CsvToBeanBuilder<Price>(input)
                     .withType(Price.class)
                     .build()
@@ -61,7 +63,26 @@ public class CsvDataParser implements DataParser{
     }
     @Override
     public Price price(String city, String sector) {
-        return null;
+        try(InputStreamReader input = new InputStreamReader(
+                getClass().getClassLoader().getResourceAsStream("Tariff.csv"))) {
+
+            List<Price> prices = new CsvToBeanBuilder<Price>(input)
+                    .withType(Price.class)
+                    .build()
+                    .parse();
+
+            for(Price price : prices) {
+                String cityName = price.getCity().trim();
+                String sectorName = price.getSector().trim();
+                if(cityName.equals(city) && sectorName.equals(sector)) {
+                    return price;
+                }
+            }
+            return null;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public List<Account> accounts() {

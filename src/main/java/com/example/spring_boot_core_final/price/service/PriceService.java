@@ -19,7 +19,7 @@ public class PriceService {
         return dataParser.sectors(city);
     }
     public Price price(String city, String sector) {
-        return null;
+        return dataParser.price(city, sector);
     }
     public String billTotal(String city, String sector, int usage) {
         return null;
